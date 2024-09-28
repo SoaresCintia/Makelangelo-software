@@ -168,6 +168,10 @@ public class NameThatColor {
 	public float green(long arg0) {	return (arg0 >>  8) & 0xFF;	}
 	public float blue (long arg0) {	return (arg0      ) & 0xFF;	}
 
+	public ArrayList<NamedColor> getColors(){
+		return colors;
+	}
+
 	/**
 	 * finds the name of the nearest known color.
 	 * @param r0 red component, 0...255
