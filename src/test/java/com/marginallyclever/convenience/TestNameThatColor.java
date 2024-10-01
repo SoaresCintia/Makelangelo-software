@@ -8,6 +8,9 @@ import java.awt.color.*;
 public class TestNameThatColor {
     // creating an instance of the NameThatColor class
     private NameThatColor ntc = new NameThatColor();
+    /**
+     * This test checks if the array of colors was filled during the creation of the NameThatColor class
+     */
     @Test
     public void arrayColorContentTest() {
         // getting the colors from the NameThatColor class
