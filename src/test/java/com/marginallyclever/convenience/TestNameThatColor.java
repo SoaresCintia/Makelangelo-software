@@ -1,6 +1,7 @@
 package com.marginallyclever.convenience;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.color.*;
@@ -16,7 +17,7 @@ public class TestNameThatColor {
         // getting the colors from the NameThatColor class
         var colors = ntc.getColors();
         // checking if the was filled during the creation of the NameThatColor class
-        assertFalse(colors.isEmpty());   
+        Assertions.assertFalse(colors.isEmpty());   
     }
 
     @Test
@@ -24,7 +25,7 @@ public class TestNameThatColor {
         // calling the find method from the NameThatColor class
         var color = ntc.find(255, 255, 255);
         // checking if the color was found
-        assertEquals("white", color);
+        Assertions.assertEquals("white", color);
     }
 
     @Test
@@ -32,7 +33,7 @@ public class TestNameThatColor {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new Color(0, 0, 0));
         // checking if the color was found
-        assertEquals("black", color);
+        Assertions.assertEquals("black", color);
     }
 
     @Test
@@ -40,7 +41,7 @@ public class TestNameThatColor {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new ColorRGB(255, 0, 0));
         // checking if the color was found
-        assertEquals("red", color);
+        Assertions.assertEquals("red", color);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class TestNameThatColor {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new Long(0xFF0000));
         // checking if the color was found
-        assertEquals("red", color);
+        Assertions.assertEquals("red", color);
     }
 
 
