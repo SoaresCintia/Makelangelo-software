@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
@@ -61,6 +60,25 @@ public class TestTransformedImage {
         int answer = transformedImage.sample(x0, y0, x1, y1);
 
         // Oracle
-        assertEquals(answer, 0);
+        assertEquals(0, answer);
+    }
+
+    @Test
+    public void testSampleUnchecked() {
+
+        // Arange
+        double x0 = 3.0;
+        double y0 = 4.0;
+        double x1 = 2.0;
+        double y1 = 3.0;
+        BufferedImage bufferedimage = new BufferedImage(10, 10,
+                BufferedImage.TYPE_INT_ARGB);
+        TransformedImage transformedImage = new TransformedImage(bufferedimage);
+
+        // Act
+        int answer = transformedImage.sample(x0, y0, x1, y1);
+
+        // Oracle
+        assertEquals(0, answer);
     }
 }
