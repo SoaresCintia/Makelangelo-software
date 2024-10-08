@@ -21,7 +21,7 @@ public class TestColorRGB {
         ColorRGB c2 = new ColorRGB(0x12,0x34,0x56);
         // Setting the color of c to the color of c2
         c.set(c2);
-        // Checking if the colors are equal
+        // Checking if the colors are equal(Oracle)
         Assertions.assertEquals(c.red, c2.red);
         Assertions.assertEquals(c.green, c2.green);
         Assertions.assertEquals(c.blue, c2.blue);
@@ -37,7 +37,7 @@ public class TestColorRGB {
         // Subtracting the color of c2 from the color of c
         ColorRGB c2 = c.sub(c3);
         // Checking if the colors are equal
-
+        // ORACLE
         Assertions.assertNotEquals(c.red, c2.red);
         Assertions.assertNotEquals(c.green, c2.green);
         Assertions.assertNotEquals(c.blue, c2.blue);

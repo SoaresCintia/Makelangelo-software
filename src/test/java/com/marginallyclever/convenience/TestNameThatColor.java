@@ -16,7 +16,7 @@ public class TestNameThatColor {
     public void arrayColorContentTest() {
         // getting the colors from the NameThatColor class
         var colors = ntc.getColors();
-        // checking if the was filled during the creation of the NameThatColor class
+        // checking if the was filled during the creation of the NameThatColor class (Oracle)
         Assertions.assertFalse(colors.isEmpty());   
     }
 
@@ -24,7 +24,7 @@ public class TestNameThatColor {
     public void findColorTest() {
         // calling the find method from the NameThatColor class
         var color = ntc.find(255, 255, 255);
-        // checking if the color was found
+        // checking if the color was found(Oracle)
         Assertions.assertEquals("white", color);
     }
 
@@ -32,7 +32,7 @@ public class TestNameThatColor {
     public void findColorTest2() {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new Color(0, 0, 0));
-        // checking if the color was found
+        // checking if the color was found(Oracle)
         Assertions.assertEquals("black", color);
     }
 
@@ -40,7 +40,7 @@ public class TestNameThatColor {
     public void findColorTest3() {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new ColorRGB(255, 0, 0));
-        // checking if the color was found
+        // checking if the color was found(Oracle)
         Assertions.assertEquals("red", color);
     }
 
@@ -48,7 +48,7 @@ public class TestNameThatColor {
     public void findColorTest4() {
         // calling the find method from the NameThatColor class
         var color = ntc.find(new Long(0xFF0000));
-        // checking if the color was found
+        // checking if the color was found(Oracle)
         Assertions.assertEquals("red", color);
     }
 
