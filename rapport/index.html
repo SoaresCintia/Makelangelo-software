@@ -76,20 +76,20 @@
         </h3>
         <p>Tests pour la méthode <code>find(Long r, Long b , Long g)</code> : </p>
         <ul>
-            <li><code>findColorTest()</code> : Test si la methode retourne la bonne coleeur quand un code rbg lui est
-                donne en parametre (eg: find(255,255,255) --> white).</li>
-            <li><code>findColorTest2()</code> : Test si la methode retourne la bonne couleur quand un objet Color lui
-                est passe en parametre(find(new Color(0, 0, 0)) --> black) .</li>
-            <li><code>findColorTest3()</code> :Test si la methode retourne la bonne couleur quand un objet ColorRGB lui
-                est passe en parametre(new ColorRGB(255, 0, 0)--> red) </li>
-            <li><code>findColorTest4()</code> :Test si la methode retourne la bonne couleur quand un objet Long lui est
-                passe en parametre(new Long(0xFF0000) --> red) </li>
+            <li><code>findColorTest()</code> : Teste si la méthode retourne la bonne couleur quand un code rbg lui est
+                donné en paramètre (eg: find(255,255,255) --> white).</li>
+            <li><code>findColorTest2()</code> : Teste si la méthode retourne la bonne couleur quand un objet Color lui
+                est passé en paramètre (find(new Color(0, 0, 0)) --> black) .</li>
+            <li><code>findColorTest3()</code> : Teste si la méthode retourne la bonne couleur quand un objet ColorRGB
+                lui est passé en paramètre (new ColorRGB(255, 0, 0)--> red) </li>
+            <li><code>findColorTest4()</code> : Teste si la méthode retourne la bonne couleur quand un objet Long lui
+                est passé en paramètre (new Long(0xFF0000) --> red) </li>
         </ul>
 
-        <p>Tests pour la méthode <code>le constructeur </code> : </p>
+        <p>Test pour le constructeur : </p>
         <ul>
-            <li><code>arrayColorContentTest()</code> : Test si l'initialisation de la l'array list des coleur est bien
-                reussit</li>
+            <li><code>arrayColorContentTest()</code> : Teste si l'initialisation de la l'array list des couleurs est
+                bien réussie</li>
         </ul>
 
         <h3>Les tests ajoutés se concentrent sur la classe <a
@@ -98,14 +98,18 @@
         </h3>
         <p>Tests pour la méthode <code>set(ColorRGB c)</code> : </p>
         <ul>
-            <li><code>TestColorRGB()</code> : Vas tester si les champs des red,green et de l'objet qui appel la methode
-                set a bien ete change </li>
+            <li><code>TestColorRGB()</code> : Teste si les champs des red,green et de l'objet qui appelle la méthode
+                set ont bien été changés
+            </li>
         </ul>
 
-        <p>Tests pour la méthode <code>sub( , , ..)</code> : </p>
+        <p>Tests pour la méthode <code>sub(ColorRGB x)</code> : </p>
         <ul>
-            <li><code>TestColorRGBSub()</code> : Test si la methode sub retourne bien un objet qui a des values
-                red,green et blue different de l'objet que sub() prend en parametre.</li>
+            <li><code>TestColorRGBSub()</code> : Teste si la méthode <code>sub(ColorRGB x)</code> retourne bien un objet
+                qui a des valeurs
+                red, green et blue différentes de l'objet que <code>sub(ColorRGB x)</code>
+                prend en paramètre.
+            </li>
         </ul>
 
     </section>
