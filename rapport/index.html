@@ -12,16 +12,12 @@
 <body>
     <header>
         <h1>Rapport sur l'ajout de tests dans le projet Makelangelo-software</h1>
-        <p>Par Larry Fotso Guiffo  et Cíntia Dalila Soares</p>
+        <p>Par Larry Fotso Guiffo et Cíntia Dalila Soares</p>
     </header>
 
-    <section id="introduction">
-        <h2>Introduction</h2>
-        <p>Ce rapport documente mon travail consistant à ajouter 10 nouveaux tests dans le projet Makelangelo-software.
-        </p>
-    </section>
 
-    
+
+
 
     <section id="tests-ajoutes">
         <h2>Tests Ajoutés</h2>
@@ -30,7 +26,7 @@
                 href="https://github.com/SoaresCintia/Makelangelo-software/blob/master/src/test/java/com/marginallyclever/makelangelo/makeart/TestTransformedImage.java">TransformedImage</a>
             :
         </h3>
-        <p> Tests pour la méthode
+        <!-- <p> Tests pour la méthode
             <code>canSampleAt(double x, double y)</code> :
         </p>
         <ul>
@@ -38,8 +34,21 @@
                 retourne <code>True</code> .</li>
             <li><code>testImageOutside()</code> : teste que si on donne un point à l'exterieur de l'image, la méthode
                 retourne <code>False</code> .</li>
+        </ul> -->
+
+        <p>Les tests pour la méthode <code>canSampleAt(double x, double y)</code> vérifient la capacité de cette
+            dernière à
+            déterminer si un point donné se trouve à l'intérieur ou à l'extérieur de l'image.</p>
+        <ul>
+            <li><code>testImageInside()</code> : vérifie que lorsqu’un point situé à l’intérieur des limites de l’image
+                est
+                fourni, la méthode renvoie <code>true</code>, indiquant que l'échantillonnage est possible.</li>
+            <li><code>testImageOutside()</code> : vérifie que lorsqu’un point situé à l’extérieur des limites de l’image
+                est
+                fourni, la méthode renvoie <code>false</code>, indiquant que l'échantillonnage n'est pas possible.</li>
         </ul>
-        <p> Tests pour la méthode <code>sample(double x, double y)</code> :
+
+        <!-- <p> Tests pour la méthode <code>sample(double x, double y)</code> :
         </p>
         <ul>
             <li><code>testSampleZero()</code> : teste une branche de la méthode
@@ -47,7 +56,20 @@
                 vs bas) et que si le point à gauche et en bas est à l'exterieur
                 de l'image, on devrait recevoir la valeur 0.</li>
             <li><code>testSampleUnchecked()</code> : ... .</li>
+        </ul> -->
+
+        <p>Les tests pour la méthode <code>sample(double x, double y)</code> s’assurent que la méthode fonctionne
+            correctement
+            en différents scénarios de coordonnées d’échantillonnage.</p>
+        <ul>
+            <li><code>testSampleZero()</code> : vérifie que si des coordonnées inversées (gauche/droite et haut/bas)
+                sont
+                fournies et qu'un point situé en bas à gauche se trouve en dehors des limites de l'image, la méthode
+                renvoie la
+                valeur <code>0</code>, indiquant que l'échantillonnage est invalide.</li>
+            <li><code>testSampleUnchecked()</code> : ....</li>
         </ul>
+
 
         <h3>Les tests ajoutés se concentrent sur la classe <a
                 href="https://github.com/SoaresCintia/Makelangelo-software/blob/master/src/test/java/com/marginallyclever/convenience/TestNameThatColor.java">NameThatColor</a>
@@ -55,15 +77,20 @@
         </h3>
         <p>Tests pour la méthode <code>find(Long r, Long b , Long g)</code> : </p>
         <ul>
-            <li><code>findColorTest()</code> : Test si la methode retourne la bonne coleeur quand un code rbg lui est donne en parametre (eg: find(255,255,255) --> white).</li>
-            <li><code>findColorTest2()</code> : Test si la methode retourne la bonne couleur quand un objet Color lui est passe en parametre(find(new Color(0, 0, 0)) --> black) .</li>
-            <li><code>findColorTest3()</code> :Test si la methode retourne la bonne couleur quand un objet ColorRGB lui est passe en parametre(new ColorRGB(255, 0, 0)--> red) </li>
-            <li><code>findColorTest4()</code> :Test si la methode retourne la bonne couleur quand un objet Long lui est passe en parametre(new Long(0xFF0000) --> red) </li>
+            <li><code>findColorTest()</code> : Test si la methode retourne la bonne coleeur quand un code rbg lui est
+                donne en parametre (eg: find(255,255,255) --> white).</li>
+            <li><code>findColorTest2()</code> : Test si la methode retourne la bonne couleur quand un objet Color lui
+                est passe en parametre(find(new Color(0, 0, 0)) --> black) .</li>
+            <li><code>findColorTest3()</code> :Test si la methode retourne la bonne couleur quand un objet ColorRGB lui
+                est passe en parametre(new ColorRGB(255, 0, 0)--> red) </li>
+            <li><code>findColorTest4()</code> :Test si la methode retourne la bonne couleur quand un objet Long lui est
+                passe en parametre(new Long(0xFF0000) --> red) </li>
         </ul>
 
         <p>Tests pour la méthode <code>le constructeur </code> : </p>
         <ul>
-            <li><code>arrayColorContentTest()</code> : Test si l'initialisation de la l'array list des coleur est bien reussit</li>
+            <li><code>arrayColorContentTest()</code> : Test si l'initialisation de la l'array list des coleur est bien
+                reussit</li>
         </ul>
 
         <h3>Les tests ajoutés se concentrent sur la classe <a
@@ -72,12 +99,14 @@
         </h3>
         <p>Tests pour la méthode <code>set(ColorRGB c)</code> : </p>
         <ul>
-            <li><code>TestColorRGB()</code> : Vas tester si les champs des red,green et de l'objet qui appel la methode set a bien ete change </li>
+            <li><code>TestColorRGB()</code> : Vas tester si les champs des red,green et de l'objet qui appel la methode
+                set a bien ete change </li>
         </ul>
 
         <p>Tests pour la méthode <code>sub( , , ..)</code> : </p>
         <ul>
-            <li><code>TestColorRGBSub()</code> : Test si la methode sub retourne bien un objet qui a des values red,green et blue different de l'objet que sub() prend en parametre.</li>
+            <li><code>TestColorRGBSub()</code> : Test si la methode sub retourne bien un objet qui a des values
+                red,green et blue different de l'objet que sub() prend en parametre.</li>
         </ul>
 
     </section>
