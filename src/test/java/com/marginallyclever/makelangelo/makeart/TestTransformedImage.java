@@ -8,12 +8,15 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
 
-import java.awt.Color;
-
 public class TestTransformedImage {
 
     @Test
     public void testImageInside() {
+
+        /**
+         * vérifie que lorsqu’un point situé à l’intérieur des limites de l’image est
+         * fourni, la méthode renvoie true, indiquant que l'échantillonnage est possible
+         */
 
         // Arange
         double x = 3.0;
@@ -32,6 +35,12 @@ public class TestTransformedImage {
     @Test
     public void testImageOutside() {
 
+        /**
+         * vérifie que lorsqu’un point situé à l’extérieur des limites de l’image est
+         * fourni, la méthode renvoie false, indiquant que l'échantillonnage n'est pas
+         * possible.
+         */
+
         // Arange
         double x = 11.0;
         double y = 11.0;
@@ -48,6 +57,13 @@ public class TestTransformedImage {
 
     @Test
     public void testSampleZero() {
+
+        /**
+         * vérifie que si des coordonnées inversées (gauche/droite et haut/bas) sont
+         * fournies et qu'un point situé en bas à gauche se trouve en dehors des limites
+         * de l'image, la méthode renvoie la valeur 0, indiquant que l'échantillonnage
+         * est invalide.
+         */
 
         // Arange
         double x0 = 11.0;
