@@ -10,6 +10,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
+        jvm_flags:
+          - "-Xmx512m"
+          - "-Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"  # Limite la durée des pauses de GC à 200 ms
 
     steps:
     - uses: actions/checkout@v4
@@ -22,6 +25,8 @@ jobs:
 
     - name: Build and Test with Maven
       timeout-minutes: 15
+      env:
+        MAVEN_OPTS: ${{ matrix.jvm_flags }} # Utilisation des flags de la JVM
       run: ./mvnw -B verify
 
     - name: Get JaCoCo Coverage
