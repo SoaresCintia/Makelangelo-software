@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -36,10 +36,6 @@ jobs:
         cache: 'maven'
 
     # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-    
-    - name: Enregistrer les flags de la JVM
-      run: java -XX:+PrintFlagsFinal > jvm-flags.txt
-    
     - name: Build and Test with Maven
       timeout-minutes: 15
       env:
@@ -112,7 +108,7 @@ jobs:
     - name: Upload artifact for package
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: jar-${{ github.run_id }} # unique name with run_id to prevent conflicts
+        name: jar-${{ github.run_id }}-${{ github.job }} # unique name with run_id and job name to prevent conflicts
         retention-days: 1
         path: |
           src/main/package/jpackage*
@@ -141,7 +137,7 @@ jobs:
 
     - uses: actions/download-artifact@v4.1.7
       with:
-        name: jar-${{ github.run_id }} # ensure this matches the unique name used in upload
+        name: jar-${{ github.run_id }}-${{ github.job }} # ensure this matches the unique name used in upload
 
     - name: Check files 4
       run: ls -l target/package/
@@ -177,6 +173,6 @@ jobs:
 #      if: github.repository == 'MarginallyClever/Makelangelo-software' || github.ref != 'refs/heads/master'
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: "${{ env.BINARY }}-${{ github.run_id }}" # unique name with run_id to prevent conflicts
+        name: "${{ env.BINARY }}-${{ github.run_id }}-${{ github.job }}" # unique name with run_id and job name
         retention-days: 2
         path: ${{ env.BINARY }}
