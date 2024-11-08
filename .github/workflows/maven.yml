@@ -116,6 +116,9 @@ jobs:
           LICENSE
           README
           target/package/*
+        if-no-files-found: warn
+        compression-level: 6
+        overwrite: true  # Enable overwrite to avoid conflict
 
     - name: Check files 3
       run: ls -l target/universal-package/
