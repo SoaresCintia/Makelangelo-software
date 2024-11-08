@@ -36,6 +36,10 @@ jobs:
         cache: 'maven'
 
     # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+    
+    - name: Enregistrer les flags de la JVM
+      run: java -XX:+PrintFlagsFinal > jvm-flags.txt
+    
     - name: Build and Test with Maven
       timeout-minutes: 15
       env:
