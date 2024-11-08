@@ -18,9 +18,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        jvm_flags:
-          - "-Xmx512m"
-          - "-Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"  # Limite la durée des pauses de GC à 200 ms
+        jdk_version: [8, 11, 17]
+        jvm_flag:
+          - "-XX:+UseG1GC"
+          - "-XX:+UnlockExperimentalVMOptions"
+          - "-XX:+UseStringDeduplication"
+          - "-XX:+UseCompressedOops"
+          - "-XX:+OptimizeStringConcat"
+      fail-fast: false # 
 
     steps:
     - uses: actions/checkout@v4
@@ -37,7 +42,19 @@ jobs:
       env:
         MAVEN_OPTS: ${{ matrix.jvm_flags }} # Utilisation des flags de la JVM
       run: ./mvnw -B test -Djava.awt.headless=true
+    
+    ####
+    - name: Set up JDK ${{ matrix.jdk_version }}
+      uses: actions/setup-java@v2
+      with:
+          distribution: 'temurin' # You can specify another JDK distribution if needed
+          java-version: ${{ matrix.jdk_version }}
+    ####
 
+    - name: Tell a JVM Joke
+      run: |
+          echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
+          
     - name: Package with Maven
       run: ./mvnw -B clean package -DskipTests
 
