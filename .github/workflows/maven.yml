@@ -22,19 +22,19 @@ jobs:
         java-version: '17'
         cache: 'maven'
 
-    # Build and test with Maven
+    # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
     - name: Build and Test with Maven
       timeout-minutes: 15
       run: ./mvnw -B test -Djava.awt.headless=true
 
+    # Adding a joke after Maven build and test step
     - name: Tell a JVM Joke
       run: |
-          echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
+          echo "Pourquoi la JVM est-elle allée en thérapie ? Elle avait trop de flags non résolus ! 😂"
 
     - name: Package with Maven
       run: ./mvnw -B clean package -DskipTests
 
-    # Check files
     - name: Check files 1
       run: ls -l src/main/package/
 
@@ -64,25 +64,23 @@ jobs:
         cp LICENSE target/package/ &&
         cp README.md target/package/ 
 
-    # Checking files
     - name: Check files 2a
       run: ls -l target/universal-package/
 
     - name: Check files 2b
       run: ls -l target/package/
 
-    # Deploy universal release
     - name: Deploy universal release
       if: github.repository == 'MarginallyClever/Makelangelo-software' && github.ref == 'refs/heads/master'
       uses: WebFreak001/deploy-nightly@v3.1.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }} # automatically provided by github actions
         upload_url: ${{ env.UPLOAD_URL }}
         release_id: ${{ env.RELEASE_ID }}
-        asset_path: Makelangelo.zip
-        asset_name: Makelangelo-nightly-$$.zip
-        asset_content_type: application/zip
-        max_releases: 1
+        asset_path: Makelangelo.zip # path to archive to upload
+        asset_name: Makelangelo-nightly-$$.zip # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
+        asset_content_type: application/zip # required by GitHub API
+        max_releases: 1 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
 
     - name: Upload artifact for package
       uses: actions/upload-artifact@v4.3.3
@@ -132,17 +130,16 @@ jobs:
         echo "BINARY=$BINARY" | tee -a $GITHUB_ENV &&
         echo "BINARY_NIGHTLY=$BINARY_NIGHTLY" | tee -a $GITHUB_ENV
 
-    # Deploy installation release
     - name: Deploy installation release
       uses: WebFreak001/deploy-nightly@v3.1.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }} # automatically provided by github actions
         upload_url: ${{ env.UPLOAD_URL }}
         release_id: ${{ env.RELEASE_ID }}
-        asset_path: ${{ env.BINARY }}
-        asset_name: ${{ env.BINARY_NIGHTLY }}
-        asset_content_type: application/zip
-        max_releases: 1
+        asset_path: ${{ env.BINARY }} # path to archive to upload
+        asset_name: ${{ env.BINARY_NIGHTLY }} # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
+        asset_content_type: application/zip # required by GitHub API
+        max_releases: 1 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
 
     - name: Upload artifact for testing purpose
       uses: actions/upload-artifact@v4.3.3
@@ -151,7 +148,7 @@ jobs:
         retention-days: 2
         path: ${{ env.BINARY }}
 
-    # Adding a joke at the end
+    # Adding a final joke to end the workflow with a positive note
     - name: Final Joke
       run: |
-          echo "Build process complete! Remember, even the best code has a 'byte' of humor! 😄"
+          echo "Processus de build terminé ! N'oubliez pas, même le meilleur code a une 'byte' d'humour ! 😄"
