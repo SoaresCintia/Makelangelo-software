@@ -1,10 +1,8 @@
 name: Java CI with Maven
 
 env:
-  # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases
-  # in your browser and copy the full "upload_url" value including the {?name,label} part
   UPLOAD_URL: https://uploads.github.com/repos/MarginallyClever/Makelangelo-software/releases/54908875/assets{?name,label}
-  RELEASE_ID: 54908875 # same as above (id can just be taken out the upload_url, it's used to find old releases)
+  RELEASE_ID: 54908875
 
 on:
   push:
@@ -12,9 +10,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+        jdk_version: [22, 17]
+        jvm_flag:
+          - "-XX:+UseG1GC"
+          - "-XX:+UnlockExperimentalVMOptions"
+          - "-XX:+UseStringDeduplication"
+          - "-XX:+UseCompressedOops"
+          - "-XX:+OptimizeStringConcat"
+      fail-fast: false
+
     steps:
     - uses: actions/checkout@v4
+
+    - name: Generate timestamp
+      id: timestamp
+      run: echo "time=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
     - uses: actions/setup-java@v4.2.1
       with:
@@ -22,21 +37,24 @@ jobs:
         java-version: '17'
         cache: 'maven'
 
-    # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
     - name: Build and Test with Maven
       timeout-minutes: 15
+      env:
+        MAVEN_OPTS: ${{ matrix.jvm_flag }}
       run: ./mvnw -B test -Djava.awt.headless=true
 
-    # Adding a joke after Maven build and test step
+    - name: Set up JDK ${{ matrix.jdk_version }}
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: ${{ matrix.jdk_version }}
+
     - name: Tell a JVM Joke
       run: |
-          echo "Pourquoi la JVM est-elle allée en thérapie ? Elle avait trop de flags non résolus ! 😂"
+          echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
 
     - name: Package with Maven
       run: ./mvnw -B clean package -DskipTests
-
-    - name: Check files 1
-      run: ls -l src/main/package/
 
     - name: Prepare universal package
       shell: bash
@@ -64,28 +82,22 @@ jobs:
         cp LICENSE target/package/ &&
         cp README.md target/package/ 
 
-    - name: Check files 2a
-      run: ls -l target/universal-package/
-
-    - name: Check files 2b
-      run: ls -l target/package/
-
     - name: Deploy universal release
       if: github.repository == 'MarginallyClever/Makelangelo-software' && github.ref == 'refs/heads/master'
       uses: WebFreak001/deploy-nightly@v3.1.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }} # automatically provided by github actions
+        token: ${{ secrets.GITHUB_TOKEN }}
         upload_url: ${{ env.UPLOAD_URL }}
         release_id: ${{ env.RELEASE_ID }}
-        asset_path: Makelangelo.zip # path to archive to upload
-        asset_name: Makelangelo-nightly-$$.zip # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-        asset_content_type: application/zip # required by GitHub API
-        max_releases: 1 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
+        asset_path: Makelangelo.zip
+        asset_name: Makelangelo-nightly-${{ github.run_id }}.zip
+        asset_content_type: application/zip
+        max_releases: 1
 
     - name: Upload artifact for package
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: jar
+        name: jar-${{ github.run_id }}-${{ github.job }}-${{ env.time }}
         retention-days: 1
         path: |
           src/main/package/jpackage*
@@ -93,9 +105,9 @@ jobs:
           LICENSE
           README
           target/package/*
-
-    - name: Check files 3
-      run: ls -l target/universal-package/
+        if-no-files-found: warn
+        compression-level: 6
+        overwrite: true
 
   package:
     needs: build
@@ -103,7 +115,14 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
+    - uses: actions/checkout@v4
+
+    - name: Generate timestamp
+      id: timestamp
+      run: echo "time=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
@@ -111,10 +130,7 @@ jobs:
 
     - uses: actions/download-artifact@v4.1.7
       with:
-        name: jar
-        
-    - name: Check files 4
-      run: ls -l target/package/
+        name: jar-${{ github.run_id }}-${{ github.job }}-${{ env.time }}
 
     - name: Build installation package
       shell: bash
@@ -124,7 +140,6 @@ jobs:
         APP_VERSION=$(ls -1 target/package/Makelangelo-*-with-dependencies.jar | sed "s/.*Makelangelo-\([^-]*\)-with-dependencies.jar/\1/") &&
         sed -i.bak "s/\(--app-version\).*/\1 $APP_VERSION/" src/main/package/jpackage.cfg &&
         jpackage "@src/main/package/jpackage.cfg" "@src/main/package/jpackage-${{matrix.os}}.cfg" --main-jar "Makelangelo-$APP_VERSION-with-dependencies.jar" &&
-        ls &&
         BINARY=$(find . -maxdepth 1 -iname 'makelangelo*' | grep -E '(msi$|dmg$|deb$)' | sed "s,./,," | head -1) &&
         BINARY_NIGHTLY=$(echo $BINARY | sed 's/[Mm]akelangelo\(.*\)\.\(.*\)/\Makelangelo-nightly-$$.\2/') &&
         echo "BINARY=$BINARY" | tee -a $GITHUB_ENV &&
@@ -133,22 +148,20 @@ jobs:
     - name: Deploy installation release
       uses: WebFreak001/deploy-nightly@v3.1.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }} # automatically provided by github actions
+        token: ${{ secrets.GITHUB_TOKEN }}
         upload_url: ${{ env.UPLOAD_URL }}
         release_id: ${{ env.RELEASE_ID }}
-        asset_path: ${{ env.BINARY }} # path to archive to upload
-        asset_name: ${{ env.BINARY_NIGHTLY }} # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-        asset_content_type: application/zip # required by GitHub API
-        max_releases: 1 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
+        asset_path: ${{ env.BINARY }}
+        asset_name: ${{ env.BINARY_NIGHTLY }}
+        asset_content_type: application/zip
+        max_releases: 1
 
     - name: Upload artifact for testing purpose
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: ${{ env.BINARY }}
+        name: "${{ env.BINARY }}-${{ github.run_id }}-${{ github.job }}-${{ env.time }}"
         retention-days: 2
         path: ${{ env.BINARY }}
-
-    # Adding a final joke to end the workflow with a positive note
     - name: Final Joke
       run: |
-          echo "Processus de build terminé ! N'oubliez pas, même le meilleur code a une 'byte' d'humour ! 😄"
+            echo "Processus de build terminé ! N'oubliez pas, même le meilleur code a une 'byte' d'humour ! 😄"
