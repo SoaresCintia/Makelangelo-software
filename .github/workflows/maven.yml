@@ -13,7 +13,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        jvm_flags:
+          - "-Xmx512m"
+          - "-Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"  # Limite la durée des pauses de GC à 200 ms
+
     steps:
     - uses: actions/checkout@v4
 
@@ -26,6 +34,8 @@ jobs:
     # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
     - name: Build and Test with Maven
       timeout-minutes: 15
+      env:
+        MAVEN_OPTS: ${{ matrix.jvm_flags }} # Utilisation des flags de la JVM
       run: ./mvnw -B test -Djava.awt.headless=true
 
     - name: Package with Maven
