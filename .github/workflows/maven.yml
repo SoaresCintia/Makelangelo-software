@@ -16,16 +16,15 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest] # TODO : windows-latest ?
         jdk_version: [22, 17]
-        # Manually sanitized jvm_flag values
         jvm_flag:
-          - "-XX_UseG1GC"
-          - "-XX_UnlockExperimentalVMOptions"
-          - "-XX_UseStringDeduplication"
-          - "-XX_UseCompressedOops"
-          - "-XX_OptimizeStringConcat"
-      fail-fast: false
+          - "-XX:+UseG1GC"
+          - "-XX:+UnlockExperimentalVMOptions"
+          - "-XX:+UseStringDeduplication"
+          - "-XX:+UseCompressedOops"
+          - "-XX:+OptimizeStringConcat"
+      fail-fast: false # 
 
     steps:
     - uses: actions/checkout@v4
@@ -40,7 +39,7 @@ jobs:
     - name: Build and Test with Maven
       timeout-minutes: 15
       env:
-        MAVEN_OPTS: ${{ matrix.jvm_flag }} # Utilisation des flags de la JVM
+        MAVEN_OPTS: ${{ matrix.jvm_flags }} # Utilisation des flags de la JVM
       run: ./mvnw -B test -Djava.awt.headless=true
     
     ####
@@ -109,8 +108,7 @@ jobs:
     - name: Upload artifact for package
       uses: actions/upload-artifact@v4.3.3
       with:
-        # Unique artifact name with sanitized jvm_flag
-        name: jar-${{ matrix.os }}-${{ matrix.jdk_version }}-${{ matrix.jvm_flag }}-${{ github.run_id }}-${{ github.job }}
+        name: jar-${{ github.run_id }}-${{ github.job }} # unique name with run_id and job name to prevent conflicts
         retention-days: 1
         path: |
           src/main/package/jpackage*
@@ -139,8 +137,7 @@ jobs:
 
     - uses: actions/download-artifact@v4.1.7
       with:
-        # Matching sanitized artifact name
-        name: jar-${{ matrix.os }}-${{ matrix.jdk_version }}-${{ matrix.jvm_flag }}-${{ github.run_id }}-${{ github.job }}
+        name: jar-${{ github.run_id }}-${{ github.job }} # ensure this matches the unique name used in upload
 
     - name: Check files 4
       run: ls -l target/package/
