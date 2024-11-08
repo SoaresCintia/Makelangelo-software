@@ -42,17 +42,17 @@ jobs:
         MAVEN_OPTS: ${{ matrix.jvm_flags }} # Utilisation des flags de la JVM
       run: ./mvnw -B test -Djava.awt.headless=true
     
-    # ####
-    # - name: Set up JDK ${{ matrix.jdk_version }}
-    #   uses: actions/setup-java@v2
-    #   with:
-    #       distribution: 'temurin' # You can specify another JDK distribution if needed
-    #       java-version: ${{ matrix.jdk_version }}
-    # ####
+    ####
+    - name: Set up JDK ${{ matrix.jdk_version }}
+      uses: actions/setup-java@v2
+      with:
+          distribution: 'temurin' # You can specify another JDK distribution if needed
+          java-version: ${{ matrix.jdk_version }}
+    ####
 
-    # - name: Tell a JVM Joke
-    #   run: |
-    #       echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
+    - name: Tell a JVM Joke
+      run: |
+          echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
 
     - name: Package with Maven
       run: ./mvnw -B clean package -DskipTests
