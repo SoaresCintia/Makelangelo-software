@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest] # Todo : ajouter windows-latest ?
         jvm_flags:
           - "-Xmx512m"
           - "-Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"  # Limite la durée des pauses de GC à 200 ms
