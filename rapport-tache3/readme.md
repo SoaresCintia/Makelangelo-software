@@ -87,3 +87,11 @@ Dans le cadre de l'intégration continue, il est essentiel de maintenir un envir
 - **Blague sur la JVM** : Après l'étape de build et de test avec Maven, nous avons intégré une blague qui fait sourire tout en faisant un clin d'œil aux développeurs Java :
   ```bash
   echo "Pourquoi la JVM est-elle allée en thérapie ? Elle avait trop de flags non résolus ! 😂"
+
+- **Commits amusants** : Nous avons aussi tenté des messages de commits originaux, comme "Volta o cão arrependido", une référence à la série mexicaine *Chaves* populaire en Amérique Latine.
+
+
+
+
+
+
