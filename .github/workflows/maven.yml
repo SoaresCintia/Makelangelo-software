@@ -53,6 +53,13 @@ jobs:
       run: |
           echo "Why did the JVM go to therapy? It had too many unresolved flags! 😂"
 
+    - name: Compile and Test with flag ${{ matrix.jvm_flag }} on ${{ matrix.os }} with JDK ${{ matrix.jdk_version }}
+      run: |
+          export MAVEN_OPTS="${{ matrix.jvm_flag }}"
+          echo "Running tests with flag ${{ matrix.jvm_flag }}"
+          mvn clean test
+          echo "Phew! Finished testing with flag ${{ matrix.jvm_flag }} on ${{ matrix.os }} and JDK ${{ matrix.jdk_version }}. Let's hope nothing crashed! 🛠️"
+    
     - name: Package with Maven
       run: ./mvnw -B clean package -DskipTests
 
