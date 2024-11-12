@@ -30,6 +30,8 @@ jobs:
     - name: Generate timestamp
       id: timestamp
       run: echo "time=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+           echo "::set-output name=time::$(date +'%Y%m%d%H%M%S')"
+
 
     - uses: actions/setup-java@v4.2.1
       with:
@@ -97,7 +99,7 @@ jobs:
     - name: Upload artifact for package
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: jar-${{ github.run_id }}-${{ github.job }}-${{ env.time }}
+        name: jar-${{ github.run_id }}-${{ github.job }}-${{ steps.timestamp.outputs.time }}
         retention-days: 1
         path: |
           src/main/package/jpackage*
@@ -159,7 +161,7 @@ jobs:
     - name: Upload artifact for testing purpose
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: "${{ env.BINARY }}-${{ github.run_id }}-${{ github.job }}-${{ env.time }}"
+        name: "${{ env.BINARY }}-${{ github.run_id }}-${{ github.job }}-${{ steps.timestamp.outputs.time }}"
         retention-days: 2
         path: ${{ env.BINARY }}
     - name: Final Joke
