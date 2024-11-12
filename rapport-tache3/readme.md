@@ -76,7 +76,8 @@ Voici la configuration utilisée pour activer JaCoCo dans Maven, ce qui permet d
             </goals>
         </execution>
     </executions>
-</plugin>```
+</plugin>
+```
 
 ## Ajout d'Éléments d'Humour dans le Workflow CI/CD
 
